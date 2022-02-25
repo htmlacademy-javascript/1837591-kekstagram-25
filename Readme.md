@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Никита Сысоев](https://up.htmlacademy.ru/javascript/25/user/1837591).
-* Наставник: [Егор Дьяченко](https://htmlacademy.ru/profile/semperhomolupus).
+* Наставник: [Иван Никитин](https://htmlacademy.ru/profile/inikitin).
 
 ---
 
