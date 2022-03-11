@@ -40,41 +40,47 @@ const url = [
   'photos/25.jpg'
 ];
 
+const avatars = [
+  'img/avatar-1.svg',
+  'img/avatar-2.svg',
+  'img/avatar-3.svg',
+  'img/avatar-4.svg',
+  'img/avatar-5.svg',
+  'img/avatar-6.svg'
+];
+
+const messageList = [
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.'
+];
+
 const description = [
   'Мне понравилась эта фотография, потому что она передаёт чувства и эмоции присутствующих на ней людей, /прекрасную атмосферу летнего вечера.'
 ];
 
-const comments = [
-  { id: 135,
-    avatar: 'img/avatar-6.svg',
-    message: 'В целом всё неплохо. Но не всё.',
-    name: 'Артём',
-  }
+const namesList =  [
+  'Иван',
+  'Роман',
+  'Мария',
+  'Светлана',
+  'Федор',
+  'Екатерина',
+  'Максим'
 ];
 
-const descriptionPhoto = () => {
-  const getRandomUrlIndex = getRandomNumber(0, url.length - 1);
-  const getRandomDecriptionIndex = getRandomNumber(0, description.length - 1);
-  return {
-    getUrl: url[getRandomUrlIndex],
-    getDesctription: description[getRandomDecriptionIndex],
-    getLikes: getRandomNumber(1, 100),
-    getComments: [ {
-      id: getRandomNumber(1, 25),
-      avatar: 'img/avatar-6.svg',
-      message: 'В целом всё неплохо. Но не всё.',
-      name: 'Артём'},
-    {
-      id: getRandomNumber(1, 25),
-      avatar: 'img/avatar-6.svg',
-      message: 'В целом всё неплохо. Но не всё.',
-      name: 'Артём'},
-    {
-      id: getRandomNumber(1, 25),
-      avatar: 'img/avatar-6.svg',
-      message: 'В целом всё неплохо. Но не всё.',
-      name: 'Артём'
-    }
-    ],
-  };
-};
+const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
+
+const descriptionPhoto = () => ({
+  getUrl:  getRandomArrayElement(url),
+  getDesctription:  getRandomArrayElement(description),
+  getLikes: getRandomNumber(1, 100),
+  getComments: [ {
+    id: getRandomNumber(1, 25),
+    avatar:  getRandomArrayElement(avatars),
+    message:  getRandomArrayElement(messageList),
+    name:  getRandomArrayElement(namesList)
+  }
+  ],
+});
+
+const similarPhotoComment = Array.from({length: 25}, descriptionPhoto);
