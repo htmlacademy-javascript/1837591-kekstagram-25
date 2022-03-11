@@ -29,12 +29,10 @@ function getRandomNumber(min, max){
   return Math.floor(Math.random()*(max-min) + min);
 }
 
-// eslint-disable-next-line
 getRandomNumber(1, 100);
 
 const isValidLength = (userComment, maxLength) => userComment.length <= maxLength;
 
-// eslint-disable-next-line
 isValidLength('hello', 140);
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
