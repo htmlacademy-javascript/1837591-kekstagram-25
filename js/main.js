@@ -1,20 +1,5 @@
-function getRandomNumber(min, max){
-  if (min < 0 && min >= max) {
-    throw new Error('значение невалидно');
-  }
-  return Math.floor(Math.random()*(max-min) + min);
-}
-
-getRandomNumber(1, 100);
-
-const isValidLength = (userComment, maxLength) => userComment.length <= maxLength;
-
-isValidLength('hello', 140);
-
-
-const urlList = [];
-
-const avatarsList = [];
+let commentId = 1;
+let photoID = 0;
 
 const messageList = [
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
@@ -22,7 +7,9 @@ const messageList = [
 ];
 
 const description = [
-  'Мне понравилась эта фотография, потому что она передаёт чувства и эмоции присутствующих на ней людей, /прекрасную атмосферу летнего вечера.'
+  'Мне понравилась эта фотография, потому что она передаёт чувства и эмоции присутствующих на ней людей.',
+  'прекрасную атмосферу летнего вечера.',
+  'Всё отлично!'
 ];
 
 const namesList =  [
@@ -35,42 +22,42 @@ const namesList =  [
   'Максим'
 ];
 
-const getUrl = function(urlIndex) {
-  for(let i = 0; i <urlIndex.length; i++) {
-    return Array.concat(urlIndex[i]);
-  }
-};
-
-const getAvatars = function(avatarsIndex) {
-  for(let i = 0; i <avatarsIndex.length; i++) {
-    return Array.concat(avatarsIndex[i]);
-  }
-};
-
-const getNonRepeatNumber = function(min, max) {
-  let i;
-  if (min < 0 && min >= max && (i !== i)) {
+function getRandomNumber(min, max){
+  if (min < 0 && min >= max) {
     throw new Error('значение невалидно');
   }
   return Math.floor(Math.random()*(max-min) + min);
-};
-const getNonRepeatArrayNumber = (elements) => elements[getNonRepeatNumber(0, elements.length - 1)];
-const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
-
-const descriptionPhoto = () => ({
-  url: getNonRepeatArrayNumber(getUrl(urlList)),
-  getDesctription:  getRandomArrayElement(description),
-  getLikes: getRandomNumber(15, 200),
-  comments: [ {
-    id: getNonRepeatNumber(1, 25),
-    avatar:  getRandomArrayElement(getAvatars(avatarsList)),
-    message:  getRandomArrayElement(messageList),
-    name:  getRandomArrayElement(namesList)
-  }
-  ],
-});
+}
 
 // eslint-disable-next-line
-const similarPhotoComment = Array.from({length: 25}, descriptionPhoto);
+getRandomNumber(1, 100);
 
+const isValidLength = (userComment, maxLength) => userComment.length <= maxLength;
 
+// eslint-disable-next-line
+isValidLength('hello', 140);
+
+const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
+
+const getRandomComment = function() {
+  return {
+    id: ++commentId,
+    avatar: `img/avatar-${getRandomNumber(1,6)}.svg`,
+    message: Array.from({length: getRandomNumber(1, 3)}, () => getRandomArrayElement(messageList)).join(' '),
+    name: getRandomArrayElement(namesList)
+  };
+};
+
+const descriptionPhoto = function() {
+  ++photoID;
+  return {
+    id: photoID,
+    url: `photos/${photoID}.jpg`,
+    description:  getRandomArrayElement(description),
+    likes: getRandomNumber(15, 200),
+    comments: Array.from({length:getRandomNumber(1, 15)}, getRandomComment),
+  };
+};
+
+// eslint-disable-next-line
+const photoContent = Array.from({length: 25}, descriptionPhoto);
