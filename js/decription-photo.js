@@ -1,5 +1,5 @@
-import {getRandomArrayElement, getRandomNumber, getRandomComment, description} from 'util.js';
-
+import {getRandomArrayElement, getRandomNumber, getRandomComment} from 'util.js';
+import {description} from 'data.js';
 let photoID = 0;
 
 const descriptionPhoto = function() {

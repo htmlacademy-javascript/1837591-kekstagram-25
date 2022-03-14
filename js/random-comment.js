@@ -1,5 +1,5 @@
-import {getRandomArrayElement, getRandomNumber, namesList, messageList} from './util.js';
-
+import {getRandomArrayElement, getRandomNumber,} from './util.js';
+import {namesList, messageList} from 'data.js';
 let commentId = 1;
 
 const getRandomComment = function() {
