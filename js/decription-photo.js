@@ -15,3 +15,5 @@ const descriptionPhoto = function() {
 
 // eslint-disable-next-line
 const photoContent = Array.from({length: 25}, descriptionPhoto);
+
+export {photoContent};
