@@ -4,14 +4,14 @@ const picturesContainer = document.querySelector('.pictures');
 const similarPictureTemplate  = document.querySelector('#picture').content.querySelector('.picture');
 
 
-const similarListFragment = document.createDocumentFragment();
+const fragment = document.createDocumentFragment();
 
-photoContent.foreach((photo) => {
+photoContent.forEach((photo) => {
   const photoElement = similarPictureTemplate.cloneNode(true);
   photoElement.querySelector('.picture__img').src = photo.url;
-  photoElement.querySelector('.picture__likes').textContent = photo.likes;
-  photoElement.querySelector('.picture__comments').textContent = photo.comments;
-  similarListFragment.appendChild(photoElement);
-}
-);
-similarListFragment.appendChild(picturesContainer);
+  photoElement.querySelector('.picture__likes').textContent = photo.likes.toString();
+  photoElement.querySelector('.picture__comments').textContent = photo.comments.length.toString();
+  picturesContainer.appendChild(photoElement);
+});
+
+picturesContainer.appendChild(fragment);
