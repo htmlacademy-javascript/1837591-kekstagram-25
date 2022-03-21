@@ -1,5 +1,7 @@
-import {getRandomArrayElement, getRandomNumber, getRandomComment} from 'util.js';
-import {description} from 'data.js';
+import {getRandomArrayElement, getRandomNumber} from './util.js';
+import {description} from './data.js';
+import {getRandomComment} from './random-comment.js';
+
 let photoID = 0;
 
 const descriptionPhoto = function() {
@@ -13,5 +15,6 @@ const descriptionPhoto = function() {
   };
 };
 
-// eslint-disable-next-line
 const photoContent = Array.from({length: 25}, descriptionPhoto);
+
+export {photoContent};
