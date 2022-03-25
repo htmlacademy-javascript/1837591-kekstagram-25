@@ -4,7 +4,7 @@ const image = imageContainer.querySelector('img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const commentsCount = bigPicture.querySelector('.comments-count');
 const socialCommentsElements = bigPicture.querySelector('.social__comments');
-const bodyELement = document.querySelector('body');
+const bodyElement = document.querySelector('body');
 const descriptionElement = document.querySelector('.social__caption');
 const cancelButtonElement = bigPicture.querySelector('.big-picture__cancel');
 const socialCommentCount = bigPicture.querySelector(' .social__comment-count');
@@ -30,7 +30,7 @@ const createCommentElement = (comment) => {
 
 const closePopup = () => {
   bigPicture.classList.add('hidden');
-  bodyELement.classList.remove('modal-open');
+  bodyElement.classList.remove('modal-open');
   cancelButtonElement.removeEventListener('click', closePopup);
 };
 
@@ -41,7 +41,7 @@ document.addEventListener('keydown', (evt) => {
 });
 
 const openPopupAndFillContent = (photo) => {
-  bodyELement.classList.add('modal-open');
+  bodyElement.classList.add('modal-open');
   socialCommentCount.classList.add('hidden');
   bigPicture.classList.remove('hidden');
   socialCommentsElements.innerHTML = '';
