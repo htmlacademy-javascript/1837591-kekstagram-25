@@ -4,21 +4,22 @@ const image = imageContainer.querySelector('img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const commentsCount = bigPicture.querySelector('.comments-count');
 const socialCommentsElements = bigPicture.querySelector('.social__comments');
-const bodyELement = document.querySelector('body');
+const bodyElement = document.querySelector('body');
 const descriptionElement = document.querySelector('.social__caption');
 const cancelButtonElement = bigPicture.querySelector('.big-picture__cancel');
+const socialCommentCount = bigPicture.querySelector(' .social__comment-count');
 
 
 const createCommentElement = (comment) => {
   const commentElement = document.createElement('li');
-  commentElement.classList.add('social__comment');
   const imageElement = document.createElement('img');
+  const textElement = document.createElement('p');
+  commentElement.classList.add('social__comment');
   imageElement.classList.add('social__picture');
   imageElement.width = 35;
   imageElement.height = 35;
   imageElement.src = comment.avatar;
   imageElement.alt = comment.name;
-  const textElement = document.createElement('p');
   textElement.classList.add('social__text');
   textElement.textContent = comment.message;
   commentElement.appendChild(imageElement);
@@ -29,8 +30,8 @@ const createCommentElement = (comment) => {
 
 const closePopup = () => {
   bigPicture.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
   cancelButtonElement.removeEventListener('click', closePopup);
-  bodyELement.classList.remove('modal-open');
 };
 
 document.addEventListener('keydown', (evt) => {
@@ -40,17 +41,17 @@ document.addEventListener('keydown', (evt) => {
 });
 
 const openPopupAndFillContent = (photo) => {
-  bodyELement.classList.add('modal-open');
-  cancelButtonElement.addEventListener('click', closePopup);
+  bodyElement.classList.add('modal-open');
+  socialCommentCount.classList.add('hidden');
   bigPicture.classList.remove('hidden');
   socialCommentsElements.innerHTML = '';
   image.src = photo.url;
   likesCount.textContent = photo.likes.toString();
   commentsCount.textContent = photo.comments.length.toString();
   descriptionElement.textContent = photo.description;
-  photo.comments.forEach((comment) => {
-    socialCommentsElements.appendChild(createCommentElement(comment));
-  });
+  cancelButtonElement.addEventListener('click', closePopup);
+  photo.comments.forEach((comment) => socialCommentsElements.appendChild(createCommentElement(comment)));
+
 };
 
 export {openPopupAndFillContent};
