@@ -12,9 +12,7 @@ photoContent.forEach((photo) => {
   photoElement.querySelector('.picture__img').src = photo.url;
   photoElement.querySelector('.picture__likes').textContent = photo.likes.toString();
   photoElement.querySelector('.picture__comments').textContent = photo.comments.length.toString();
-  photoElement.addEventListener('click', () => {
-    openPopupAndFillContent(photo);
-  });
+  photoElement.addEventListener('click', () => openPopupAndFillContent(photo));
   fragment.appendChild(photoElement);
 });
 
