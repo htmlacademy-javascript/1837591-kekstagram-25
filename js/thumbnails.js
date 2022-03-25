@@ -1,4 +1,5 @@
 import {photoContent} from './decription-photo.js';
+import {openPopupAndFillContent} from './photo-comments.js';
 
 const picturesContainer = document.querySelector('.pictures');
 const similarPictureTemplate  = document.querySelector('#picture').content.querySelector('.picture');
@@ -11,7 +12,8 @@ photoContent.forEach((photo) => {
   photoElement.querySelector('.picture__img').src = photo.url;
   photoElement.querySelector('.picture__likes').textContent = photo.likes.toString();
   photoElement.querySelector('.picture__comments').textContent = photo.comments.length.toString();
-  picturesContainer.appendChild(photoElement);
+  photoElement.addEventListener('click', () => openPopupAndFillContent(photo));
+  fragment.appendChild(photoElement);
 });
 
 picturesContainer.appendChild(fragment);
