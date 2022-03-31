@@ -51,7 +51,6 @@ const openPopupAndFillContent = (photo) => {
   descriptionElement.textContent = photo.description;
   cancelButtonElement.addEventListener('click', closePopup);
   photo.comments.forEach((comment) => socialCommentsElements.appendChild(createCommentElement(comment)));
-
 };
 
 export {openPopupAndFillContent};
