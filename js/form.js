@@ -7,6 +7,15 @@ const uploadFile = document.querySelector('#upload-file');
 const hashTagInput = form.querySelector('.text__hashtags');
 const textDescription = form.querySelector('.text__description');
 
+const pristine = new Pristine(form, {
+  classTo: 'img-upload__text',
+  errorTextParent: 'img-upload__text',
+  errorTextClass: 'setup-wizard-form__error-text',
+});
+
+pristine.addValidator(textDescription, validateComment, 'превышен максимальный лимит комментария', 1, false);
+pristine.addValidator(hashTagInput, validateHashtag, 'Ошибка', 1, false);
+
 const onClosePopup = () => {
   imgUpload.classList.add('hidden');
   imgUploadCancelButton.removeEventListener('click', onClosePopup);
@@ -25,9 +34,7 @@ const onOpenPopup = () => {
     }
   });
   form.addEventListener('submit', (evt) => {
-    const isValidHashTag = validateHashtag(hashTagInput.value);
-    const isValidComment = validateComment(textDescription.value);
-    if (!(isValidHashTag || isValidComment)) {
+    if (!pristine.validate()) {
       evt.preventDefault();
     }
   });

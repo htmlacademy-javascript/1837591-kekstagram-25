@@ -35,7 +35,7 @@ const closePopup = () => {
 };
 
 document.addEventListener('keydown', (evt) => {
-  if (evt.keyCode === 27) {
+  if (evt.key === 'Escape') {
     bigPicture.classList.add('hidden');
   }
 });

@@ -1,23 +1,11 @@
 import {isValidLength} from './util.js';
 
 const hashTagRE = /^#[A-Za-zА-Яа-яЕё0-9]{1,19}$/;
-const COMMENT_MAX_LENGTH = 140;
-
-
-const form = document.querySelector('.img-upload__form');
-
-const pristine = new Pristine(form, {
-  classTo: 'img-upload__text',
-  errorTextParent: 'img-upload__text',
-  errorTextClass: 'setup-wizard-form__error-text',
-});
-
-
-let isValid = pristine.validate();
-
+const COMMENT_MAX_LENGTH = 5;
 
 const validateHashtag = (hashtagString) => {
   const hashTagArray = hashtagString.split(' ');
+  let isValid = true;
   hashTagArray.forEach((hashtag, idx) => {
     if(!hashTagRE.test(hashtag)) {
       isValid = false;
@@ -32,7 +20,6 @@ const validateHashtag = (hashtagString) => {
   });
   return isValid;
 };
-
 
 const validateComment = (comments) => isValidLength(comments, COMMENT_MAX_LENGTH);
 
