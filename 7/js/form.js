@@ -1,4 +1,4 @@
-import {validateHashtag, validateComment} from './validation.js';
+import {isValidHashtag, validateComment} from './validation.js';
 
 const form = document.querySelector('.img-upload__form');
 const imgUpload = form.querySelector('.img-upload__overlay');
@@ -10,11 +10,11 @@ const textDescription = form.querySelector('.text__description');
 const pristine = new Pristine(form, {
   classTo: 'img-upload__text',
   errorTextParent: 'img-upload__text',
-  errorTextClass: 'setup-wizard-form__error-text',
+  errorTextClass: 'form-error-text',
 });
 
 pristine.addValidator(textDescription, validateComment, 'превышен максимальный лимит комментария', 1, false);
-pristine.addValidator(hashTagInput, validateHashtag, 'Ошибка', 1, false);
+pristine.addValidator(hashTagInput, isValidHashtag, 'Ошибка', 1, false);
 
 const onClosePopup = () => {
   imgUpload.classList.add('hidden');
