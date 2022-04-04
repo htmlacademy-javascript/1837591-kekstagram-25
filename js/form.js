@@ -28,14 +28,15 @@ const onClosePopup = () => {
 const onClosePopupHashTag = (evt) => {
   if (evt.key === 'Escape' && !isFocusedElement(textDescription) && !isFocusedElement(hashTagInput)) {
     onClosePopup();
+    document.removeEventListener('keydown', onClosePopupHashTag);
   }
 };
 
 const onOpenPopup = () => {
   imgUpload.classList.remove('hidden');
+  bodyElement.classList.add('modal-open');
   imgUploadCancelButton.addEventListener('click', onClosePopup);
   document.addEventListener('keydown', onClosePopupHashTag);
-
   form.addEventListener('submit', (evt) => {
     if (!pristine.validate()) {
       evt.preventDefault();

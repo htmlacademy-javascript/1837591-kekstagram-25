@@ -52,6 +52,7 @@ const renderComments = (comments, maxVisibleComments) => {
 };
 
 const openPopupAndFillContent = (photo) => {
+  loadMoreButton.classList.remove('hidden');
   let maxVisibleComments = 5;
   bodyElement.classList.add('modal-open');
   bigPicture.classList.remove('hidden');
@@ -67,6 +68,9 @@ const openPopupAndFillContent = (photo) => {
     maxVisibleComments += 5;
     renderComments(photo.comments, maxVisibleComments);
     socialCount.textContent = socialCommentsElements.children.length;
+    if (photo.comments.length === socialCommentsElements.children.length) {
+      loadMoreButton.classList.add('hidden');
+    }
   });
 };
 
