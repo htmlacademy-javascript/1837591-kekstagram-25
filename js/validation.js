@@ -1,11 +1,12 @@
 import {isValidLength} from './util.js';
 
 const hashTagRE = /^#[A-Za-zА-Яа-яЕё0-9]{1,19}$/;
-const COMMENT_MAX_LENGTH = 5;
+const COMMENT_MAX_LENGTH = 140;
 
-const validateHashtag = (hashtagString) => {
+const isValidHashtag = (hashtagString) => {
   const hashTagArray = hashtagString.split(' ');
   let isValid = true;
+  hashTagArray.toLowerCase();
   hashTagArray.forEach((hashtag, idx) => {
     if(!hashTagRE.test(hashtag)) {
       isValid = false;
@@ -23,4 +24,4 @@ const validateHashtag = (hashtagString) => {
 
 const validateComment = (comments) => isValidLength(comments, COMMENT_MAX_LENGTH);
 
-export {validateHashtag, validateComment};
+export {isValidHashtag, validateComment};
