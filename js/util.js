@@ -10,4 +10,6 @@ const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements
 
 const isValidLength = (userComment, maxLength) => userComment.length <= maxLength;
 
-export {getRandomNumber, getRandomArrayElement, isValidLength};
+const isFocusedElement = (elem) => document.activeElement === elem;
+
+export {getRandomNumber, getRandomArrayElement, isValidLength, isFocusedElement};
