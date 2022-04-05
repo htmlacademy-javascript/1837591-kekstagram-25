@@ -10,6 +10,7 @@ const cancelButtonElement = bigPicture.querySelector('.big-picture__cancel');
 const loadMoreButton = bigPicture.querySelector('.social__comments-loader');
 const socialCount = bigPicture.querySelector('.social__count');
 const STEP = 5;
+const MIN_COMMENTS = 5;
 
 
 const createCommentElement = (comment) => {
@@ -33,6 +34,7 @@ const createCommentElement = (comment) => {
 const closePopup = () => {
   bigPicture.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
+  loadMoreButton.classList.remove('hidden');
   cancelButtonElement.removeEventListener('click', closePopup);
 };
 
@@ -52,7 +54,9 @@ const renderComments = (comments, maxVisibleComments) => {
 };
 
 const openPopupAndFillContent = (photo) => {
-  loadMoreButton.classList.remove('hidden');
+  if (photo.comments.length <= MIN_COMMENTS) {
+    loadMoreButton.classList.add('hidden');
+  }
   let maxVisibleComments = 5;
   bodyElement.classList.add('modal-open');
   bigPicture.classList.remove('hidden');
