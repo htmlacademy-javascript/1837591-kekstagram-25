@@ -7,7 +7,10 @@ const socialCommentsElements = bigPicture.querySelector('.social__comments');
 const bodyElement = document.querySelector('body');
 const descriptionElement = document.querySelector('.social__caption');
 const cancelButtonElement = bigPicture.querySelector('.big-picture__cancel');
-const socialCommentCount = bigPicture.querySelector(' .social__comment-count');
+const loadMoreButton = bigPicture.querySelector('.social__comments-loader');
+const socialCount = bigPicture.querySelector('.social__count');
+const STEP = 5;
+const MIN_COMMENTS = 5;
 
 
 const createCommentElement = (comment) => {
@@ -31,18 +34,31 @@ const createCommentElement = (comment) => {
 const closePopup = () => {
   bigPicture.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
+  loadMoreButton.classList.remove('hidden');
   cancelButtonElement.removeEventListener('click', closePopup);
 };
 
 document.addEventListener('keydown', (evt) => {
-  if (evt.keyCode === 27) {
+  if (evt.key === 'Escape') {
     bigPicture.classList.add('hidden');
   }
 });
 
+const renderComments = (comments, maxVisibleComments) => {
+  for (let i = maxVisibleComments - STEP; i < maxVisibleComments; i++) {
+    if (!comments[i]) {
+      break;
+    }
+    socialCommentsElements.appendChild(createCommentElement(comments[i]));
+  }
+};
+
 const openPopupAndFillContent = (photo) => {
+  if (photo.comments.length <= MIN_COMMENTS) {
+    loadMoreButton.classList.add('hidden');
+  }
+  let maxVisibleComments = 5;
   bodyElement.classList.add('modal-open');
-  socialCommentCount.classList.add('hidden');
   bigPicture.classList.remove('hidden');
   socialCommentsElements.innerHTML = '';
   image.src = photo.url;
@@ -50,8 +66,16 @@ const openPopupAndFillContent = (photo) => {
   commentsCount.textContent = photo.comments.length.toString();
   descriptionElement.textContent = photo.description;
   cancelButtonElement.addEventListener('click', closePopup);
-  photo.comments.forEach((comment) => socialCommentsElements.appendChild(createCommentElement(comment)));
-
+  renderComments(photo.comments, maxVisibleComments);
+  socialCount.textContent =  socialCommentsElements.children.length;
+  loadMoreButton.addEventListener('click', () => {
+    maxVisibleComments += 5;
+    renderComments(photo.comments, maxVisibleComments);
+    socialCount.textContent = socialCommentsElements.children.length;
+    if (photo.comments.length === socialCommentsElements.children.length) {
+      loadMoreButton.classList.add('hidden');
+    }
+  });
 };
 
 export {openPopupAndFillContent};
