@@ -20,6 +20,7 @@ const imgUploadPreview = document.querySelector('.img-upload__preview');
 
 const MINSCALE = 0.25;
 const MAXSCALE = 1;
+const STARTSCALE = 1;
 let currentScale = 1;
 
 
@@ -50,6 +51,8 @@ const onOpenPopup = () => {
   bodyElement.classList.add('modal-open');
   imgUploadPreview.className = 'img-upload__preview';
   imgUploadPreview.style.filter = '';
+  imgUploadPreview.querySelector('img').style.transform = '';
+  scaleValue.value = `${STARTSCALE * 100}%`;
   effectSlider.setAttribute('hidden', true);
   imgUploadCancelButton.addEventListener('click', onClosePopup);
   document.addEventListener('keydown', onClosePopupHashTag);
@@ -64,7 +67,7 @@ const onScaleSmaller = () => {
   if (currentScale > MINSCALE) {
     currentScale -= 0.25;
     imgUploadPreview.querySelector('img').style.transform = `scale(${currentScale})`;
-    scaleValue.value = currentScale;
+    scaleValue.value = `${(currentScale * 100).toFixed(0)}%`;
   }
 };
 
@@ -72,7 +75,7 @@ const onScaleBigger = () => {
   if (currentScale < MAXSCALE) {
     currentScale += 0.25;
     imgUploadPreview.querySelector('img').style.transform = `scale(${currentScale})`;
-    scaleValue.value = currentScale;
+    scaleValue.value = `${(currentScale * 100).toFixed(0)}%`;
   }
 };
 
@@ -92,6 +95,9 @@ noUiSlider.create(effectSlider, {
 
 effectSlider.noUiSlider.on('update', () => {
   const intensity = effectSlider.noUiSlider.get();
+  if (!imgUploadPreview.classList.contains('effects__preview--none')) {
+    effectSlider.removeAttribute('hidden', true);
+  }
   if (imgUploadPreview.classList.contains('effects__preview--chrome')) {
     imgUploadPreview.style.filter = `grayscale(${intensity})`;
   } else if (imgUploadPreview.classList.contains('effects__preview--sepia')) {
