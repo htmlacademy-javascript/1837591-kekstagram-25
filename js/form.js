@@ -18,9 +18,8 @@ const effectsList = document.querySelector('.effects__list');
 const imgUploadPreview = document.querySelector('.img-upload__preview');
 
 
-const MINSCALE = 0.25;
-const MAXSCALE = 1;
-const STARTSCALE = 1;
+const MIN_SCALE = 0.25;
+const MAX_SCALE = 1;
 let currentScale = 1;
 
 
@@ -36,6 +35,10 @@ pristine.addValidator(hashTagInput, isValidHashtag, 'Ошибка', 1, false);
 const onClosePopup = () => {
   imgUpload.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
+  imgUploadPreview.style.filter = '';
+  imgUploadPreview.querySelector('img').style.transform = '';
+  currentScale = 1;
+  imgUploadPreview.className = 'img-upload__preview';
   imgUploadCancelButton.removeEventListener('click', onClosePopup);
 };
 
@@ -45,15 +48,15 @@ const onClosePopupHashTag = (evt) => {
     document.removeEventListener('keydown', onClosePopupHashTag);
   }
 };
+const setScaleValue = () => {
+  scaleValue.value = `${currentScale * 100}%`;
+};
 
 const onOpenPopup = () => {
   imgUpload.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
-  imgUploadPreview.className = 'img-upload__preview';
-  imgUploadPreview.style.filter = '';
-  imgUploadPreview.querySelector('img').style.transform = '';
-  scaleValue.value = `${STARTSCALE * 100}%`;
-  effectSlider.setAttribute('hidden', true);
+  effectSlider.classList.add('hidden');
+  setScaleValue();
   imgUploadCancelButton.addEventListener('click', onClosePopup);
   document.addEventListener('keydown', onClosePopupHashTag);
   form.addEventListener('submit', (evt) => {
@@ -64,18 +67,18 @@ const onOpenPopup = () => {
 };
 
 const onScaleSmaller = () => {
-  if (currentScale > MINSCALE) {
+  if (currentScale > MIN_SCALE) {
     currentScale -= 0.25;
     imgUploadPreview.querySelector('img').style.transform = `scale(${currentScale})`;
-    scaleValue.value = `${(currentScale * 100).toFixed(0)}%`;
+    setScaleValue();
   }
 };
 
 const onScaleBigger = () => {
-  if (currentScale < MAXSCALE) {
+  if (currentScale < MAX_SCALE) {
     currentScale += 0.25;
     imgUploadPreview.querySelector('img').style.transform = `scale(${currentScale})`;
-    scaleValue.value = `${(currentScale * 100).toFixed(0)}%`;
+    setScaleValue();
   }
 };
 
@@ -95,9 +98,6 @@ noUiSlider.create(effectSlider, {
 
 effectSlider.noUiSlider.on('update', () => {
   const intensity = effectSlider.noUiSlider.get();
-  if (!imgUploadPreview.classList.contains('effects__preview--none')) {
-    effectSlider.removeAttribute('hidden', true);
-  }
   if (imgUploadPreview.classList.contains('effects__preview--chrome')) {
     imgUploadPreview.style.filter = `grayscale(${intensity})`;
   } else if (imgUploadPreview.classList.contains('effects__preview--sepia')) {
@@ -110,13 +110,17 @@ effectSlider.noUiSlider.on('update', () => {
     imgUploadPreview.style.filter = `brightness(${intensity})`;
   } else if (imgUploadPreview.classList.contains('effects__preview--none'))  {
     imgUploadPreview.style.filter = '';
-    effectSlider.setAttribute('hidden', true);
   }
 });
 
 effectsList.addEventListener('change', (evt) => {
   imgUploadPreview.className = 'img-upload__preview';
   imgUploadPreview.classList.add(`effects__preview--${evt.target.value}`);
+  if (evt.target.value === 'none') {
+    effectSlider.classList.add('hidden');
+  } else {
+    effectSlider.classList.remove('hidden');
+  }
   effectSlider.noUiSlider.updateOptions(dataEffects[evt.target.value]);
 });
 
