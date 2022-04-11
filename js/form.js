@@ -1,5 +1,5 @@
 import {isValidHashtag, validateComment} from './validation.js';
-import {isFocusedElement} from './util.js';
+import {isFocusedElement, showAlert} from './util.js';
 import {dataEffects} from './slider-effects.js';
 
 const form = document.querySelector('.img-upload__form');
@@ -16,11 +16,71 @@ const scaleValue = document.querySelector('.scale__control--value');
 const effectSlider = document.querySelector('.effect-level__slider');
 const effectsList = document.querySelector('.effects__list');
 const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadSubmit = document.querySelector('.img-upload__submit');
 
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+
+const onCloseErrorPopup = () => {
+  errorTemplate.classList.add('hidden');
+  errorTemplate.removeEventListener('click', onCloseErrorPopup);
+};
+
+const onCloseEscPopupError = (evt) => {
+  if (evt.key === 'Escape') {
+    onCloseErrorPopup();
+    document.removeEventListener('keydown', onCloseEscPopupError);
+  }
+};
+
+const errorBlock = () => {
+  const fragment = document.createDocumentFragment();
+  errorTemplate.classList.remove('hidden');
+  errorTemplate.querySelector('.error__button').addEventListener('click', onCloseErrorPopup);
+  document.addEventListener('keydown', onCloseEscPopupError);
+  fragment.appendChild(errorTemplate);
+  bodyElement.appendChild(fragment);
+};
+
+const onCloseSuccessPopup = () => {
+  successTemplate.classList.add('hidden');
+  successTemplate.removeEventListener('click', onCloseSuccessPopup);
+};
+
+const onCloseEscPopupSuccess = (evt) => {
+  if (evt.key === 'Escape') {
+    onCloseSuccessPopup();
+    document.removeEventListener('keydown', onCloseEscPopupSuccess);
+  }
+};
+
+const successBlock = () => {
+  const fragment = document.createDocumentFragment();
+  successTemplate.classList.remove('hidden');
+  successTemplate.querySelector('.success__button').addEventListener('click', onCloseSuccessPopup);
+  document.addEventListener('keydown', onCloseEscPopupSuccess);
+  fragment.appendChild(successTemplate);
+  bodyElement.appendChild(fragment);
+};
+
+const blockSubmitButton = () => {
+  imgUploadSubmit.disabled = true;
+  imgUploadSubmit.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  imgUploadSubmit.disabled = false;
+  imgUploadSubmit.textContent = 'Публиковать';
+};
 
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 1;
 let currentScale = 1;
+
+const cleanFormFields = () => {
+  hashTagInput.value = '';
+  textDescription.value = '';
+};
 
 
 const pristine = new Pristine(form, {
@@ -60,8 +120,27 @@ const onOpenPopup = () => {
   imgUploadCancelButton.addEventListener('click', onClosePopup);
   document.addEventListener('keydown', onClosePopupHashTag);
   form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
     if (!pristine.validate()) {
       evt.preventDefault();
+    } else {
+      const formData = new FormData(evt.target);
+      blockSubmitButton();
+      fetch('https://25.javascript.pages.academy/kekstagram',
+        {
+          method: 'POST',
+          body: formData,
+        }).then(() => {
+        onClosePopup();
+        successBlock();
+        cleanFormFields();
+        unblockSubmitButton();
+      }).catch(() => {
+        onClosePopup();
+        errorBlock();
+        cleanFormFields();
+        showAlert('Не удалось загрузить фото!');
+      });
     }
   });
 };
