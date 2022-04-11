@@ -1,6 +1,7 @@
 import {isValidHashtag, validateComment} from './validation.js';
 import {isFocusedElement, showAlert} from './util.js';
 import {dataEffects} from './slider-effects.js';
+import {sendData} from './api.js';
 
 const form = document.querySelector('.img-upload__form');
 const imgUpload = form.querySelector('.img-upload__overlay');
@@ -63,14 +64,9 @@ const successBlock = () => {
   bodyElement.appendChild(fragment);
 };
 
-const blockSubmitButton = () => {
-  imgUploadSubmit.disabled = true;
-  imgUploadSubmit.textContent = 'Публикую...';
-};
-
-const unblockSubmitButton = () => {
-  imgUploadSubmit.disabled = false;
-  imgUploadSubmit.textContent = 'Публиковать';
+const setSubmitButtonState = (isDisabled) => {
+  imgUploadSubmit.disabled = isDisabled;
+  imgUploadSubmit.textContent = isDisabled ? 'Публикую...' : 'Публиковать';
 };
 
 const MIN_SCALE = 0.25;
@@ -80,6 +76,7 @@ let currentScale = 1;
 const cleanFormFields = () => {
   hashTagInput.value = '';
   textDescription.value = '';
+  form.reset();
 };
 
 
@@ -123,25 +120,25 @@ const onOpenPopup = () => {
     evt.preventDefault();
     if (!pristine.validate()) {
       evt.preventDefault();
-    } else {
-      const formData = new FormData(evt.target);
-      blockSubmitButton();
-      fetch('https://25.javascript.pages.academy/kekstagram',
-        {
-          method: 'POST',
-          body: formData,
-        }).then(() => {
+      return;
+    }
+    const formData = new FormData(evt.target);
+    setSubmitButtonState(true);
+    sendData(
+      formData,
+      () => {
         onClosePopup();
         successBlock();
         cleanFormFields();
-        unblockSubmitButton();
-      }).catch(() => {
+        setSubmitButtonState(false);
+      },
+      () => {
         onClosePopup();
         errorBlock();
         cleanFormFields();
+        setSubmitButtonState(false);
         showAlert('Не удалось загрузить фото!');
       });
-    }
   });
 };
 

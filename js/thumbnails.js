@@ -1,11 +1,10 @@
-import {photoContent} from './decription-photo.js';
 import {openPopupAndFillContent} from './photo-comments.js';
 
 const picturesContainer = document.querySelector('.pictures');
 const similarPictureTemplate  = document.querySelector('#picture').content.querySelector('.picture');
 
 
-const similarListPhotos = (similarPhotos) => {
+const renderSimilarListPhotos = (similarPhotos) => {
   const fragment = document.createDocumentFragment();
 
   similarPhotos.forEach((photo) => {
@@ -20,4 +19,4 @@ const similarListPhotos = (similarPhotos) => {
 };
 
 
-export {similarListPhotos};
+export {renderSimilarListPhotos};
