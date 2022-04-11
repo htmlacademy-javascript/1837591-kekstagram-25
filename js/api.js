@@ -7,7 +7,7 @@ const POST_URL = 'https://25.javascript.pages.academy/kekstagram';
 fetch(GET_URL)
   .then((response) => response.json())
   .then((photos) => {
-    renderSimilarListPhotos(photos); // TODO добавить глагол в функцию
+    renderSimilarListPhotos(photos);
   })
   .catch(() => {
     showAlert('Не удалось загрузить фото!');
