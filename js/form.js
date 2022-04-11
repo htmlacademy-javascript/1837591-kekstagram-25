@@ -1,6 +1,7 @@
 import {isValidHashtag, validateComment} from './validation.js';
-import {isFocusedElement} from './util.js';
+import {isFocusedElement, showAlert} from './util.js';
 import {dataEffects} from './slider-effects.js';
+import {sendData} from './api.js';
 
 const form = document.querySelector('.img-upload__form');
 const imgUpload = form.querySelector('.img-upload__overlay');
@@ -16,11 +17,67 @@ const scaleValue = document.querySelector('.scale__control--value');
 const effectSlider = document.querySelector('.effect-level__slider');
 const effectsList = document.querySelector('.effects__list');
 const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadSubmit = document.querySelector('.img-upload__submit');
 
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+
+const onCloseErrorPopup = () => {
+  errorTemplate.classList.add('hidden');
+  errorTemplate.removeEventListener('click', onCloseErrorPopup);
+};
+
+const onCloseEscPopupError = (evt) => {
+  if (evt.key === 'Escape') {
+    onCloseErrorPopup();
+    document.removeEventListener('keydown', onCloseEscPopupError);
+  }
+};
+
+const errorBlock = () => {
+  const fragment = document.createDocumentFragment();
+  errorTemplate.classList.remove('hidden');
+  errorTemplate.querySelector('.error__button').addEventListener('click', onCloseErrorPopup);
+  document.addEventListener('keydown', onCloseEscPopupError);
+  fragment.appendChild(errorTemplate);
+  bodyElement.appendChild(fragment);
+};
+
+const onCloseSuccessPopup = () => {
+  successTemplate.classList.add('hidden');
+  successTemplate.removeEventListener('click', onCloseSuccessPopup);
+};
+
+const onCloseEscPopupSuccess = (evt) => {
+  if (evt.key === 'Escape') {
+    onCloseSuccessPopup();
+    document.removeEventListener('keydown', onCloseEscPopupSuccess);
+  }
+};
+
+const successBlock = () => {
+  const fragment = document.createDocumentFragment();
+  successTemplate.classList.remove('hidden');
+  successTemplate.querySelector('.success__button').addEventListener('click', onCloseSuccessPopup);
+  document.addEventListener('keydown', onCloseEscPopupSuccess);
+  fragment.appendChild(successTemplate);
+  bodyElement.appendChild(fragment);
+};
+
+const setSubmitButtonState = (isDisabled) => {
+  imgUploadSubmit.disabled = isDisabled;
+  imgUploadSubmit.textContent = isDisabled ? 'Публикую...' : 'Публиковать';
+};
 
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 1;
 let currentScale = 1;
+
+const cleanFormFields = () => {
+  hashTagInput.value = '';
+  textDescription.value = '';
+  form.reset();
+};
 
 
 const pristine = new Pristine(form, {
@@ -60,9 +117,28 @@ const onOpenPopup = () => {
   imgUploadCancelButton.addEventListener('click', onClosePopup);
   document.addEventListener('keydown', onClosePopupHashTag);
   form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
     if (!pristine.validate()) {
       evt.preventDefault();
+      return;
     }
+    const formData = new FormData(evt.target);
+    setSubmitButtonState(true);
+    sendData(
+      formData,
+      () => {
+        onClosePopup();
+        successBlock();
+        cleanFormFields();
+        setSubmitButtonState(false);
+      },
+      () => {
+        onClosePopup();
+        errorBlock();
+        cleanFormFields();
+        setSubmitButtonState(false);
+        showAlert('Не удалось загрузить фото!');
+      });
   });
 };
 
