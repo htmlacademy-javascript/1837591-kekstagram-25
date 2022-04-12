@@ -8,7 +8,10 @@ const isValidHashtag = (hashtagString) => {
   const hashTagArray = hashtagString.split(' ').map((elem) => elem.toLowerCase());
   let isValid = true;
   hashTagArray.forEach((hashtag, idx) => {
-    if(!hashTagRE.test(hashtag) || hashTagArray.length > MAX_HASHTAGS) {
+    if (hashtag === '') {
+      isValid = true;
+    }
+    else if(!hashTagRE.test(hashtag) || hashTagArray.length > MAX_HASHTAGS) {
       isValid = false;
     }
     for (let i = idx + 1; i < hashTagArray.length; i++) {

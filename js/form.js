@@ -34,11 +34,19 @@ const onCloseEscPopupError = (evt) => {
   }
 };
 
+const onCloseClickError = (evt) => {
+  if (evt.target.className === 'error') {
+    onCloseErrorPopup();
+    errorTemplate.removeEventListener('click', onCloseClickError);
+  }
+};
+
 const errorBlock = () => {
   const fragment = document.createDocumentFragment();
   errorTemplate.classList.remove('hidden');
   errorTemplate.querySelector('.error__button').addEventListener('click', onCloseErrorPopup);
   document.addEventListener('keydown', onCloseEscPopupError);
+  errorTemplate.addEventListener('click', onCloseClickError);
   fragment.appendChild(errorTemplate);
   bodyElement.appendChild(fragment);
 };
@@ -55,11 +63,19 @@ const onCloseEscPopupSuccess = (evt) => {
   }
 };
 
+const onCloseClickSuccess = (evt) => {
+  if (evt.target.className === 'success') {
+    onCloseSuccessPopup();
+    successTemplate.removeEventListener('click', onCloseClickError);
+  }
+};
+
 const successBlock = () => {
   const fragment = document.createDocumentFragment();
   successTemplate.classList.remove('hidden');
   successTemplate.querySelector('.success__button').addEventListener('click', onCloseSuccessPopup);
   document.addEventListener('keydown', onCloseEscPopupSuccess);
+  successTemplate.addEventListener('click', onCloseClickSuccess);
   fragment.appendChild(successTemplate);
   bodyElement.appendChild(fragment);
 };
@@ -93,6 +109,7 @@ const onClosePopup = () => {
   imgUpload.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   imgUploadPreview.style.filter = '';
+  imgUpload.querySelector('img').src = 'img/upload-default-image.jpg';
   imgUploadPreview.querySelector('img').style.transform = '';
   currentScale = 1;
   imgUploadPreview.className = 'img-upload__preview';
@@ -202,8 +219,10 @@ effectsList.addEventListener('change', (evt) => {
 
 
 uploadFile.addEventListener('change', (evt) => {
+  const file = evt.target.files[0];
   if (!evt.target.files[0]) {
     return;
   }
+  imgUpload.querySelector('img').src = window.URL.createObjectURL(file);
   onOpenPopup();
 });
