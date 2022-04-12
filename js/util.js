@@ -35,4 +35,13 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomNumber, getRandomArrayElement, isValidLength, isFocusedElement, showAlert};
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+
+export {getRandomNumber, getRandomArrayElement, isValidLength, isFocusedElement, showAlert, debounce};

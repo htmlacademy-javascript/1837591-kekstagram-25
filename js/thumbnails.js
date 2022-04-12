@@ -2,7 +2,14 @@ import {openPopupAndFillContent} from './photo-comments.js';
 
 const picturesContainer = document.querySelector('.pictures');
 const similarPictureTemplate  = document.querySelector('#picture').content.querySelector('.picture');
+const imgFilters = document.querySelector('.img-filters');
 
+const clearPhotos = () => {
+  const pictures = document.querySelectorAll('.picture');
+  for (const picture of pictures) {
+    picture.remove();
+  }
+};
 
 const renderSimilarListPhotos = (similarPhotos) => {
   const fragment = document.createDocumentFragment();
@@ -16,7 +23,8 @@ const renderSimilarListPhotos = (similarPhotos) => {
     fragment.appendChild(photoElement);
   });
   picturesContainer.appendChild(fragment);
+  imgFilters.classList.remove('img-filters--inactive');
 };
 
 
-export {renderSimilarListPhotos};
+export {renderSimilarListPhotos, clearPhotos};
