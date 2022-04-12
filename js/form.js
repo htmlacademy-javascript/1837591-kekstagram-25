@@ -62,6 +62,7 @@ const onCloseEscPopupSuccess = (evt) => {
     document.removeEventListener('keydown', onCloseEscPopupSuccess);
   }
 };
+
 const onCloseClickSuccess = (evt) => {
   if (evt.target.className === 'success') {
     onCloseSuccessPopup();
@@ -222,6 +223,6 @@ uploadFile.addEventListener('change', (evt) => {
   if (!evt.target.files[0]) {
     return;
   }
-  imgUpload.querySelector('img').src = window.URL.createObjectURL(file);  // todo вернуть по умолчанию при закрытии;
+  imgUpload.querySelector('img').src = window.URL.createObjectURL(file);
   onOpenPopup();
 });
