@@ -41,6 +41,7 @@ const closePopup = () => {
 document.addEventListener('keydown', (evt) => {
   if (evt.key === 'Escape') {
     bigPicture.classList.add('hidden');
+    loadMoreButton.classList.remove('hidden');
   }
 });
 
@@ -71,6 +72,7 @@ const openPopupAndFillContent = (photo) => {
   loadMoreButton.addEventListener('click', () => {
     maxVisibleComments += 5;
     renderComments(photo.comments, maxVisibleComments);
+    console.log(maxVisibleComments);
     socialCount.textContent = socialCommentsElements.children.length;
     if (photo.comments.length === socialCommentsElements.children.length) {
       loadMoreButton.classList.add('hidden');
