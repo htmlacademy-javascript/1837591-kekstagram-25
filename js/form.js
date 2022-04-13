@@ -41,7 +41,7 @@ const onCloseClickError = (evt) => {
   }
 };
 
-const errorBlock = () => {
+const showErrorBlock = () => {
   const fragment = document.createDocumentFragment();
   errorTemplate.classList.remove('hidden');
   errorTemplate.querySelector('.error__button').addEventListener('click', onCloseErrorPopup);
@@ -70,7 +70,7 @@ const onCloseClickSuccess = (evt) => {
   }
 };
 
-const successBlock = () => {
+const showSuccessBlock = () => {
   const fragment = document.createDocumentFragment();
   successTemplate.classList.remove('hidden');
   successTemplate.querySelector('.success__button').addEventListener('click', onCloseSuccessPopup);
@@ -145,13 +145,13 @@ const onOpenPopup = () => {
       formData,
       () => {
         onClosePopup();
-        successBlock();
+        showSuccessBlock();
         cleanFormFields();
         setSubmitButtonState(false);
       },
       () => {
         onClosePopup();
-        errorBlock();
+        showErrorBlock();
         cleanFormFields();
         setSubmitButtonState(false);
         showAlert('Не удалось загрузить фото!');
